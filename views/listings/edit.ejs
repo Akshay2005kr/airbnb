@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>waderLand</title>
+</head>
+<body>
+    <h2>edit your  Listing  </h2>
+</br>
+    <form method="POST" action="/listings/<%= listing._id %>?_method=PUT">
+        <input name="listings[title]" value="<%= listing.title %>" type="text">
+    </br>
+        <textarea name="listings[description]" ><%= listing.description %></textarea>
+</br>
+        <input name="listings[image]" value="<%= listing.image %>" placeholder="enter url" type="text">
+        <br>
+        <br>
+        <input name="listings[price]" value="<%= listing.price %>" placeholder="enter price" type="number">
+        <br>
+        <input name="listings[location]" value="<%= listing.location %>" placeholder="enter location" type="text">
+        <br>
+        <input name="listings[country]" value="<%= listing.country %>" placeholder="enter country" type="text">
+        <br>
+        <button >edit</button>
+
+    </form>
+    
+</body>
+</html>
