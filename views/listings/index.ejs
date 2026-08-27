@@ -1,22 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>wanderLand</title>
-</head>
-<body>
-    <h1>run</h1>
-    <form nethod="Get" , action="/listings/new">
-        <button>
-            create new listing
-        </button>
-    </form>
-     <ul>
-<% for(let listing of allListing){ %>
-   <li><a href="/listings/<%= listing._id %>"><%= listing.title %></a></li>
-<% } %>
-</ul>
-</body>
-</html>
+<% layout("layouts/boilerplate") %>
 
+<body>
+    <h1>Wanderland Listings</h1>
+
+    <div class="row">
+      <% for (let listing of allListing) { %>
+    <div class="card" style="width: 20rem;">
+  <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image">
+  <div class="card-body">
+    <p class="card-text">
+         <%= listing.title %> <br/>
+         Price: ₹ <%= listing.price.toLocaleString("en-IN") %><br/>
+    </p>
+  </div>
+</div>
+ <% } %>
+ </div>
+
+</body>
