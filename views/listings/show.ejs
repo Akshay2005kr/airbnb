@@ -1,24 +1,72 @@
 <% layout("layouts/boilerplate") %>
 
-<body>
-    <h3><%= listing.title %></h3>
+<div class="row mt-3">
 
-    <ul>
-        <li><%= listing.description %></li>
-        <li>Price: ₹ <%= listing.price.toLocaleString("en-IN") %></li>
-        <li>Location: <%= listing.location %></li>
-        <li>Country: <%= listing.country %></li>
-    </ul>
+    <div class="col-6 offset-3">
 
-    <br>
+        <h3><%= listing.title %></h3>
 
-    <a href="/listings/<%= listing._id %>/edit">
-        Edit this Listing
-    </a>
+        <div class="card">
 
-    <br>
+            <img
+                src="<%= listing.image.url %>"
+                class="card-img-top show-image"
+                alt="listing_image"
+            >
 
-    <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
-        <button>Delete</button>
-    </form>
-</body>
+            <div class="card-body">
+
+                <p class="card-text">
+
+                    <%= listing.title %>
+                    <br>
+
+                    <%= listing.description %>
+                    <br>
+
+                    Price: ₹ <%= listing.price.toLocaleString("en-IN") %>
+                    <br>
+
+                    Location: <%= listing.location %>
+                    <br>
+
+                    Country: <%= listing.country %>
+
+                </p>
+
+            </div>
+        </div>
+
+        <br>
+
+        <!-- Edit and Delete buttons -->
+        <div class="row mb-3">
+
+            <div class="col-2">
+                <a
+                    href="/listings/<%= listing._id %>/edit"
+                    class="btn btn-dark"
+                    style="color: rgb(233, 232, 232);
+                     background-color: rgb(238, 88, 88);
+                     border: none;"
+                >
+                    Edit
+                </a>
+            </div>
+
+            <div class="col-2">
+                <form
+                    method="POST"
+                    action="/listings/<%= listing._id %>?_method=DELETE"
+                >
+                    <button class="btn btn-dark">
+                        Delete
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

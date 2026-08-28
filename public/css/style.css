@@ -1,10 +1,18 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.container{
+    flex: 1;
+}
 .navbar{
     height: 5rem;
     background-color: white;
 }
 
 .fa-compass{
-    color: #9f2917;
+    color: rgb(206, 70, 70);
     font-size: 2rem;
 
 }
@@ -22,7 +30,7 @@ footer{
     color: #222222 !important;
 }
 .f-info-link a:hover{
-    color: #9f2917 !important;
+    color: rgb(206, 70, 70) !important;
     text-decoration: underline;
 }
 .f-info-social {
@@ -48,4 +56,44 @@ footer{
     align-items: space-evenly;
     text-align: center;
 
+}
+
+/* cards */
+.card{
+    border: none !important;
+    margin-bottom: 2rem;
+}
+
+.card-img-top{
+    border-radius: 1rem !important;
+    width: 100% !important;
+    object-fit: cover !important;
+}
+
+.card-body{
+    padding: 0 !important;
+
+}
+
+.card.text p{
+       font-weight: 400;
+}
+.listing-link{
+   text-decoration: none; 
+}
+.card-img-overlay{
+    opacity: 0;
+}
+.card-img-overlay:hover{
+    opacity: 0.2;
+    background-color:rgb(42, 41, 41) ;
+}
+
+.add-btn {
+    background-color: rgb(206, 70, 70) !important;
+    border: none !important;
+    
+}
+.show-image{
+    height: 40vh;
 }

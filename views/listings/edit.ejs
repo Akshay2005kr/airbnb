@@ -1,30 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>waderLand</title>
-</head>
-<body>
-    <h2>edit your  Listing  </h2>
-</br>
-    <form method="POST" action="/listings/<%= listing._id %>?_method=PUT">
-        <input name="listings[title]" value="<%= listing.title %>" type="text">
-    </br>
-        <textarea name="listings[description]" ><%= listing.description %></textarea>
-</br>
-        <input name="listings[image]" value="<%= listing.image %>" placeholder="enter url" type="text">
-        <br>
-        <br>
-        <input name="listings[price]" value="<%= listing.price %>" placeholder="enter price" type="number">
-        <br>
-        <input name="listings[location]" value="<%= listing.location %>" placeholder="enter location" type="text">
-        <br>
-        <input name="listings[country]" value="<%= listing.country %>" placeholder="enter country" type="text">
-        <br>
-        <button >edit</button>
+<% layout("layouts/boilerplate") %>
 
-    </form>
-    
-</body>
-</html>
+<div class="row">
+    <div class="col-8 offset-2">
+
+        <h2>Edit Your Listing</h2>
+
+        <form method="POST" action="/listings/<%= listing._id %>?_method=PUT">
+
+            <!-- Title -->
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input
+                    name="listings[title]"
+                    value="<%= listing.title %>"
+                    placeholder="Enter title"
+                    type="text"
+                    class="form-control"
+                >
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea
+                    name="listings[description]"
+                    class="form-control"
+                    placeholder="Enter description"
+                ><%= listing.description %></textarea>
+            </div>
+
+            <!-- Image URL -->
+            <div class="mb-3">
+                <label for="image" class="form-label">Image URL</label>
+                <input
+                    name="listings[image]"
+                    value="<%= listing.image %>"
+                    placeholder="Enter image URL"
+                    type="text"
+                    class="form-control"
+                >
+            </div>
+
+            <!-- Price -->
+            <div class="mb-3">
+                <label for="price" class="form-label">Price</label>
+                <input
+                    name="listings[price]"
+                    value="<%= listing.price %>"
+                    placeholder="Enter price"
+                    type="number"
+                    class="form-control"
+                >
+            </div>
+
+            <!-- Location and Country -->
+            <div class="row">
+
+                <!-- Location -->
+                <div class="mb-3 col-md-8">
+                    <label for="location" class="form-label">Location</label>
+                    <input
+                        name="listings[location]"
+                        value="<%= listing.location %>"
+                        placeholder="Enter location"
+                        type="text"
+                        class="form-control"
+                    >
+                </div>
+
+                <!-- Country -->
+                <div class="mb-3 col-md-4">
+                    <label for="country" class="form-label">Country</label>
+                    <input
+                        name="listings[country]"
+                        value="<%= listing.country %>"
+                        placeholder="Enter country"
+                        type="text"
+                        class="form-control"
+                    >
+                </div>
+
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn add-btn">
+                Edit
+            </button>
+
+        </form>
+
+    </div>
+</div>
