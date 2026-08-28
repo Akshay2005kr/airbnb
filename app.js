@@ -1,105 +1,130 @@
-const express=require("express");
-const app=express();
-const mongoosh=require("mongoose"); 
-const Listing=require("./modales/listing.js");
-const path=require("path");
-const methodOverride=require("method-override");
-const ejsMate=require("ejs-mate");
+const express = require("express");
+const app = express();
+const mongoose = require("mongoose");
+const Listing = require("./modales/listing.js");
+const path = require("path");
+const methodOverride = require("method-override");
+const ejsMate = require("ejs-mate");
+const warpasync = require("./utils/warpasync.js");
+const expresseror=require("./utils/expresserror.js");
+const { error } = require("console");
 
+// EJS Mate
 app.engine("ejs", ejsMate);
-const mourl="mongodb://127.0.0.1:27017/wanderland";
 
 
-main().then(()=>{
-    console.log("connected to database");
-}).catch((err)=>{
-    console.log(err);
-});
-async function main(){
-    await mongoosh.connect(mourl)
+// MongoDB
+const mourl = "mongodb://127.0.0.1:27017/wanderland";
+
+main()
+    .then(() => {
+        console.log("connected to database");
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+
+async function main() {
+    await mongoose.connect(mourl);
 }
 
-app.set("view engine" , "ejs");
-app.set("views" , path.join(__dirname , "views"));
-app.use(express.urlencoded({extended:true}));
+
+// App settings
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
+
+// Middleware
+app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
-app.use(express.static(path.join(__dirname , "/public")));
+app.use(express.static(path.join(__dirname, "/public")));
 
-app.get("/" ,(req, res)=>{
+
+// Home route
+app.get("/", (req, res) => {
     res.send("hello its running");
-})
+});
 
-  //index route for listings
-app.get("/listings", async (req, res) => {
+
+// INDEX ROUTE
+app.get("/listings",  warpasync(async (req, res) => {
     const allListing = await Listing.find({});
     res.render("listings/index", { allListing });
+}));
+
+
+// NEW ROUTE
+app.get("/listings/new", (req, res) => {
+    res.render("listings/new");
 });
 
 
+// SHOW ROUTE
+app.get("/listings/:id",  warpasync(async (req, res) => {
+    let { id } = req.params;
 
-     ///new rout to create new listing 
-     app.get("/listings/new" , (req , res)=>{
-     res.render("listings/new");
-     });
+    const listing = await Listing.findById(id);
 
-//show rout 
-app.get("/listings/:id" , async(req , res)=>{
-    let {id}=req.params;
-      const listing=await Listing.findById(id);
-      res.render("listings/show" , {listing});
-});
+    res.render("listings/show", { listing });
+}));
 
-//create rout new
-app.post("/listings" , async(req ,  res)=>{
-     const newListing=new Listing(req.body.listings);
-     await newListing.save();
-      res.redirect("/listings");
-    
-});
 
-//edit roudt
-app.get("/listings/:id/edit" , async(req , res)=>{
-     let {id}=req.params;
-      const listing=await Listing.findById(id);
-      res.render("listings/edit" , {listing});
-});
+// CREATE ROUTE
+app.post("/listings", warpasync(async (req, res, next) => {
+    const newListing = new Listing(req.body.listings);
+    await newListing.save();
+    res.redirect("/listings");
+}));
 
-//update route
-app.put("/listings/:id" , async(req , res)=>{ 
-    let {id}=req.params;
-    await Listing.findByIdAndUpdate(id , req.body.listings);
+
+// EDIT ROUTE
+app.get("/listings/:id/edit",  warpasync(async (req, res) => {
+    let { id } = req.params;
+
+    const listing = await Listing.findById(id);
+
+    res.render("listings/edit", { listing });
+}));
+
+
+// UPDATE ROUTE
+app.put("/listings/:id",  warpasync(async (req, res) => {
+    let { id } = req.params;
+
+    let listing = await Listing.findById(id);
+
+    Object.assign(listing, req.body.listings);
+
+    await listing.save();
+
     res.redirect(`/listings/${id}`);
+}));
+
+
+// DELETE ROUTE
+app.delete("/listings/:id",  warpasync(async (req, res) => {
+    let { id } = req.params;
+
+    let deletedListing = await Listing.findByIdAndDelete(id);
+
+    console.log(deletedListing);
+
+    res.redirect("/listings");
+}));
+
+//for new rout
+app.all("/{*splat}", (req, res, next) => {
+    next(new expresseror(404, "Page not found"));
 });
 
-//deleate rout
-app.delete("/listings/:id" , async(req , res)=>{
-    let {id}=req.params;
-   let delatedlisting= await Listing.findByIdAndDelete(id);
-   console.log(delatedlisting);
-   res.redirect("/listings");
-})
+//midalwar manage
+app.use((err , req , res , next)=>{
+    let{statuscode=500 , message="somthing went wrong"}=err;
+    res.status(statuscode).message(message);
+});
 
 
-
-
-
-
-
-
-// app.get("/testListing" , async (req , res)=>{
-//    let sampleListing=new Listing({
-//         title:"Sample Listing",
-//         description:"This is a sample listing",
-//         price:100,
-//         location:"New York",
-//         image:"",
-//         country:"USA"
-//    });
-//       await sampleListing.save();
-//       console.log("sample listing saved");
-//       res.send("sample listing saved");
-// });
-
-app.listen(8080 , ()=>{
+// START SERVER
+app.listen(8080, () => {
     console.log("server is running on port 8080");
-})
+});

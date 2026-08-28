@@ -5,7 +5,8 @@
 
         <h2>Create New Listing</h2>
 
-        <form method="POST" action="/listings">
+        <form method="POST" action="/listings" novalidate
+         class="needs-validation">
 
             <!-- Title -->
             <div class="mb-3">
@@ -15,7 +16,9 @@
                     placeholder="Enter title"
                     type="text"
                     class="form-control"
+                    required
                 >
+            <div class="valid-feedback">Tital looks good</div>
             </div>
 
             <!-- Description -->
@@ -25,14 +28,16 @@
                     name="listings[description]"
                     class="form-control"
                     placeholder="Enter description"
+                    required
                 ></textarea>
+                <div class="invalid-feedback">Please enter Valide Dec</div>
             </div>
 
             <!-- Image URL -->
             <div class="mb-3">
                 <label for="image" class="form-label">Image URL</label>
                 <input
-                    name="listings[image]"
+                    name="listings[image][url]"
                     placeholder="Enter image URL"
                     type="text"
                     class="form-control"
@@ -43,11 +48,13 @@
             <div class="mb-3">
                 <label for="price" class="form-label">Price</label>
                 <input
-                    name="listings[price]"
-                    placeholder="Enter price"
-                    type="number"
-                    class="form-control"
-                >
+    name="listings[price]"
+    placeholder="Enter price"
+    type="number"
+    class="form-control"
+    required
+>
+                 <div class="invalid-feedback">enter valide price</div>
             </div>
 
             <!-- Location and Country -->
@@ -60,7 +67,9 @@
                         placeholder="Enter location"
                         type="text"
                         class="form-control"
+                        required
                     >
+                    <div class="invalid-feedback">Please enter Valide country</div>
                 </div>
 
                 <div class="mb-3 col-md-4">
@@ -70,7 +79,9 @@
                         placeholder="Enter country"
                         type="text"
                         class="form-control"
+                        required
                     >
+                    <div class="invalid-feedback">Please enter Valide</div>
                 </div>
 
             </div>
