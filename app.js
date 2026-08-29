@@ -8,6 +8,8 @@ const ejsMate = require("ejs-mate");
 const warpasync = require("./utils/warpasync.js");
 const expresseror=require("./utils/expresserror.js");
 const { error } = require("console");
+const { required, listingschema } = require("./shema.js");
+
 
 // EJS Mate
 app.engine("ejs", ejsMate);
@@ -45,6 +47,18 @@ app.get("/", (req, res) => {
     res.send("hello its running");
 });
 
+const validatelisting = (req, res, next) => {
+    const { error } = listingschema.validate(req.body);
+
+    if (error) {
+        throw new expresseror(400, error.message);
+    }else{
+
+    next();
+    }
+};
+
+
 
 // INDEX ROUTE
 app.get("/listings",  warpasync(async (req, res) => {
@@ -70,11 +84,14 @@ app.get("/listings/:id",  warpasync(async (req, res) => {
 
 
 // CREATE ROUTE
-app.post("/listings", warpasync(async (req, res, next) => {
+app.post("/listings" ,validatelisting, warpasync(async (req, res, next) => {
     const newListing = new Listing(req.body.listings);
+    // Save to MongoDB
     await newListing.save();
+    // Redirect after successful save
     res.redirect("/listings");
 }));
+
 
 
 // EDIT ROUTE
@@ -88,7 +105,7 @@ app.get("/listings/:id/edit",  warpasync(async (req, res) => {
 
 
 // UPDATE ROUTE
-app.put("/listings/:id",  warpasync(async (req, res) => {
+app.put("/listings/:id",validatelisting , warpasync(async (req, res) => {
     let { id } = req.params;
 
     let listing = await Listing.findById(id);
@@ -118,12 +135,15 @@ app.all("/{*splat}", (req, res, next) => {
 });
 
 //midalwar manage
-app.use((err , req , res , next)=>{
-    let{statuscode=500 , message="somthing went wrong"}=err;
-    res.status(statuscode).message(message);
+// Error handling middleware
+app.use((err, req, res, next) => {
+    let {
+        statusCode = 500,
+        message = "Something went wrong"
+    } = err;
+
+    res.status(statusCode).render("error", { err });
 });
-
-
 // START SERVER
 app.listen(8080, () => {
     console.log("server is running on port 8080");
