@@ -1,3 +1,8 @@
+ @media (max-width: 768px) {
+    .reviews-container {
+        grid-template-columns: 1fr;
+    }
+}
 body {
     display: flex;
     flex-direction: column;
@@ -96,4 +101,37 @@ footer{
 }
 .show-image{
     height: 40vh;
+}
+
+/* Reviews */
+
+.reviews-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.review-box {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 1.2rem;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    min-height: 150px;
+}
+
+.review-rating {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.review-comment {
+    font-size: 1rem;
+    word-wrap: break-word;
+}
+@media (max-width: 768px) {
+    .reviews-container {
+        grid-template-columns: 1fr;
+    }
 }
