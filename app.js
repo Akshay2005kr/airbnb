@@ -6,6 +6,7 @@ const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const expresseror = require("./utils/expresserror.js");
+const session=require("express-session");
 
 
 const listings=require("./routes/listing.js");
@@ -48,6 +49,13 @@ app.use(methodOverride("_method"));
 
 app.use(express.static(path.join(__dirname, "/public")));
 
+
+const sessionOptions={
+    secret:"mysecret",
+    resave: false,
+    saveUniitialzed: true
+
+};
 
 // ================= HOME ROUTE =================
 
