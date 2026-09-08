@@ -1,0 +1,140 @@
+const express=require("express");
+const router=express.Router();
+const warpasync = require("../utils/warpasync.js");
+const expresseror = require("../utils/expresserror.js");
+const { listingschema } = require("../shema.js");
+const Listing = require("../modales/listing.js");
+
+
+
+// Listing validation
+const validatelisting = (req, res, next) => {
+
+    const { error } = listingschema.validate(req.body);
+
+    if (error) {
+        throw new expresseror(400, error.message);
+    }
+
+    next();
+};
+
+// ================= INDEX ROUTE =================
+
+router.get(
+    "/",
+    warpasync(async (req, res) => {
+
+        const allListing = await Listing.find({});
+
+        res.render("listings/index", {
+            allListing
+        });
+    })
+);
+
+
+// ================= NEW ROUTE =================
+
+router.get("/new", (req, res) => {
+
+    res.render("listings/new");
+
+});
+
+
+// ================= SHOW ROUTE =================
+
+router.get(
+    "/:id",
+    warpasync(async (req, res) => {
+
+        let { id } = req.params;
+
+        const listing = await Listing.findById(id)
+            .populate("reviews");
+
+        res.render("listings/show", {
+            listing
+        });
+
+    })
+);
+
+
+// ================= CREATE LISTING =================
+
+router.post(
+    "/",
+    validatelisting,
+    warpasync(async (req, res) => {
+
+        const newListing = new Listing(req.body.listings);
+
+        await newListing.save();
+
+        res.redirect("/listings");
+
+    })
+);
+
+
+// ================= EDIT ROUTE =================
+
+router.get(
+    "/:id/edit",
+    warpasync(async (req, res) => {
+
+        let { id } = req.params;
+
+        const listing = await Listing.findById(id);
+
+        res.render("listings/edit", {
+            listing
+        });
+
+    })
+);
+
+
+// ================= UPDATE ROUTE =================
+
+router.put(
+    "/:id",
+    validatelisting,
+    warpasync(async (req, res) => {
+
+        let { id } = req.params;
+
+        let listing = await Listing.findById(id);
+
+        Object.assign(listing, req.body.listings);
+
+        await listing.save();
+
+        res.redirect(`/listings/${id}`);
+
+    })
+);
+
+
+// ================= DELETE LISTING =================
+
+router.delete(
+    "/:id",
+    warpasync(async (req, res) => {
+
+        let { id } = req.params;
+
+        let deletedListing =
+            await Listing.findByIdAndDelete(id);
+
+        console.log(deletedListing);
+          
+        res.redirect("/listings");
+
+    })
+);
+
+
+module.exports=router;
