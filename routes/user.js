@@ -3,6 +3,7 @@ const router = express.Router();
 
 const User = require("../modales/user.js");
 const wrapAsync = require("../utils/warpasync.js");
+const passport = require("passport");
 
 // ================= REGISTER ROUTE =================
 
@@ -26,4 +27,16 @@ router.post("/signup", wrapAsync(   async (req, res) => {
     }
 }));
 
+router.post(
+    "/login",
+    passport.authenticate("local", {
+        failureFlash: true,
+        failureRedirect: "/login",
+        keepSessionInfo: true
+    }),
+    async (req, res) => {
+        res.redirect("/listings");
+    }
+);
+ 
 module.exports = router;
