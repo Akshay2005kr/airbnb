@@ -72,6 +72,7 @@ router.post(
         const newListing = new Listing(req.body.listings);
 
         await newListing.save();
+        req.flash("success", "Successfully made a new listing");
 
         res.redirect("/listings");
 
@@ -111,6 +112,7 @@ router.put(
         Object.assign(listing, req.body.listings);
 
         await listing.save();
+        req.flash("success", "Successfully updated the listing");
 
         res.redirect(`/listings/${id}`);
 
@@ -128,6 +130,8 @@ router.delete(
 
         let deletedListing =
             await Listing.findByIdAndDelete(id);
+            req.flash("error", "Successfully deleted the listing");
+
 
         console.log(deletedListing);
           
