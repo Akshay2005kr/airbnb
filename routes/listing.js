@@ -53,7 +53,10 @@ router.get(
 
         const listing = await Listing.findById(id)
             .populate("reviews");
-
+        if(!listing){
+            req.flash("error", "cannot fount the listing ");
+            return res.redirect("/listings");
+        }
         res.render("listings/show", {
             listing
         });
@@ -89,6 +92,11 @@ router.get(
         let { id } = req.params;
 
         const listing = await Listing.findById(id);
+
+         if(!listing){
+            req.flash("error", "cannot fount the listing ");
+            return res.redirect("/listings");
+        }
 
         res.render("listings/edit", {
             listing
