@@ -8,11 +8,15 @@ const ejsMate = require("ejs-mate");
 const expresseror = require("./utils/expresserror.js");
 const session=require("express-session");
 const flash=require("connect-flash");
+const passport=require("passport");
+const LocalStrategy=require("passport-local"); 
+const passportLocalMongoose = require("passport-local-mongoose"); 
+const User=require("./modales/user.js");
 
 
-const listings=require("./routes/listing.js");
-const reviews=require("./routes/review.js");
-
+const listingsRouter=require("./routes/listing.js");
+const reviewsRouter=require("./routes/review.js");
+const usersRouter=require("./routes/user.js");
 
 // ================= EJS MATE =================
 
@@ -64,13 +68,21 @@ const sessionOptions={
 };
 
 
-app.get("/", (req, res) => {
-    res.send("hello its running");
-});
+
 
 
 app.use(session(sessionOptions));
 app.use(flash());
+
+
+//================= PASSPORT =================
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // ================= HOME ROUTE =================
 
@@ -80,11 +92,33 @@ app.use((req , res , next)=>{
     next();
 })
 
+app.get("/demouser" , async(req , res)=>{
+    let fakeuser=new User
+    ({
+        email:"demouser@example.com",
+        username:"demouser"
+    })
+
+    let newuser=await User.register(fakeuser , "@Akshu");
+    res.send(newuser);
+    });
 
 
-app.use('/listings' , listings);
-app.use('/listings/:id/reviews' , reviews);
+app.get("/", (req, res) => {
+    res.redirect("/home");
+});
 
+// ================= HOME ROUTE =================
+
+app.get("/home", (req, res) => {
+    res.render("listings/home");
+});
+
+
+
+app.use('/listings' , listingsRouter);
+app.use('/listings/:id/reviews' , reviewsRouter);
+app.use('/' , usersRouter);
    
 
 
@@ -126,5 +160,6 @@ app.listen(8080, () => {
     console.log(
         "server is running on port 8080"
     );
+    
 
 });
