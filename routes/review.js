@@ -30,7 +30,7 @@ router.post(
     "/",
     validatereview,
     warpasync(async (req, res) => {
-
+         //console.log(req.body);
         // Find listing
         let listing = await Listing.findById(req.params.id);
 

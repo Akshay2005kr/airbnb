@@ -53,9 +53,11 @@ app.use(express.static(path.join(__dirname, "/public")));
 const sessionOptions={
     secret:"mysecret",
     resave: false,
-    saveUniitialzed: true
+    saveUninitialized: true
 
 };
+
+app.use(session(sessionOptions));
 
 // ================= HOME ROUTE =================
 
