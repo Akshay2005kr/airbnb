@@ -27,15 +27,25 @@ router.post("/signup", wrapAsync(   async (req, res) => {
     }
 }));
 
+
+router.get("/login", (req, res) => {
+    res.render("users/login");
+});
+
 router.post(
     "/login",
+
     passport.authenticate("local", {
         failureFlash: true,
-        failureRedirect: "/login",
-        keepSessionInfo: true
+        failureRedirect: "/login"
     }),
-    async (req, res) => {
+
+    (req, res) => {
+
+        req.flash("success", "Welcome back!");
+
         res.redirect("/listings");
+
     }
 );
  

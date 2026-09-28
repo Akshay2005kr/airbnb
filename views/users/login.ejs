@@ -5,34 +5,23 @@
 
         <h2 class="mb-4">Login</h2>
 
-        <form action="/login" method="POST" class="needs-validation" novalidate>
+        <form action="/login" method="POST">
 
-            <!-- Username / Email -->
             <div class="mb-3">
-                <label for="login" class="form-label">
-                    Username or Email
+                <label for="username" class="form-label">
+                    Username
                 </label>
 
                 <input
                     type="text"
+                    name="username"
+                    id="username"
                     class="form-control"
-                    id="login"
-                    name="login"
-                    placeholder="Enter username or email"
+                    placeholder="Enter username"
                     required
                 >
-
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
-
-                <div class="invalid-feedback">
-                    Please enter your username or email.
-                </div>
             </div>
 
-
-            <!-- Password -->
             <div class="mb-3">
                 <label for="password" class="form-label">
                     Password
@@ -40,23 +29,14 @@
 
                 <input
                     type="password"
-                    class="form-control"
-                    id="password"
                     name="password"
+                    id="password"
+                    class="form-control"
                     required
                 >
-
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
-
-                <div class="invalid-feedback">
-                    Please enter your password.
-                </div>
             </div>
 
-
-            <button type="submit" class="btn btn-primary">
+            <button class="btn btn-primary">
                 Login
             </button>
 
