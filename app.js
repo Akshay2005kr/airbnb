@@ -73,15 +73,23 @@ app.use(express.static(path.join(__dirname, "/public")));
 const sessionOptions = {
     secret: "mysecret",
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
 
     cookie: {
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
         maxAge: 1000 * 60 * 60 * 24 * 7,
         httpOnly: true
     }
 };
 
 app.use(session(sessionOptions));
+
+
+// ==================================================
+// FLASH
+// ==================================================
+
+app.use(flash());
 
 
 // ==================================================
@@ -100,38 +108,17 @@ passport.deserializeUser(User.deserializeUser());
 
 
 // ==================================================
-// FLASH
+// FLASH LOCALS
 // ==================================================
-
-app.use(flash());
 
 app.use((req, res, next) => {
 
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
 
-    // Make logged-in user available in EJS
-    res.locals.currUser = req.user;
-
     next();
+
 });
-
-
-// ==================================================
-// DEBUG AUTHENTICATION
-// ==================================================
-
-// Remove this later after everything works
-
-app.use((req, res, next) => {
-
-    console.log("USER:", req.user);
-    console.log("AUTHENTICATED:", req.isAuthenticated());
-
-    next();
-});
-
-
 // ==================================================
 // HOME ROUTES
 // ==================================================
@@ -143,6 +130,26 @@ app.get("/", (req, res) => {
 app.get("/home", (req, res) => {
     res.render("listings/home");
 });
+
+
+// ==================================================
+// DEMO USER
+// ==================================================
+
+// app.get("/demouser", async (req, res) => {
+
+//     let fakeuser = new User({
+//         email: "demouser@example.com",
+//         username: "demouser"
+//     });
+
+//     let newuser = await User.register(
+//         fakeuser,
+//         "@Akshu"
+//     );
+
+//     res.send(newuser);
+// });
 
 
 // ==================================================
