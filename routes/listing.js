@@ -4,6 +4,7 @@ const warpasync = require("../utils/warpasync.js");
 const expresseror = require("../utils/expresserror.js");
 const { listingschema } = require("../shema.js");
 const Listing = require("../modales/listing.js");
+const { isLoggedIn } = require("../middielware.js");
 
 
 
@@ -36,12 +37,12 @@ router.get(
 
 // ================= NEW ROUTE =================
 
-router.get("/new", (req, res) => {
-
-    if (!req.isAuthenticated()) {
-        req.flash("error", "You must be logged in to create a new listing");
-        return res.redirect("/login");
-    }
+router.get("/new", isLoggedIn, (req, res) => {
+     console.log(req.user);
+    // if (!req.isAuthenticated()) {
+    //     req.flash("error", "You must be logged in to create a new listing");
+    //     return res.redirect("/login");
+    // }
 
     res.render("listings/new");
 });
@@ -89,6 +90,7 @@ router.post(
 
 router.get(
     "/:id/edit",
+    isLoggedIn,
     warpasync(async (req, res) => {
 
         let { id } = req.params;
@@ -113,6 +115,7 @@ router.get(
 router.put(
     "/:id",
     validatelisting,
+    isLoggedIn,
     warpasync(async (req, res) => {
 
         let { id } = req.params;
@@ -134,6 +137,7 @@ router.put(
 
 router.delete(
     "/:id",
+    isLoggedIn,
     warpasync(async (req, res) => {
 
         let { id } = req.params;
