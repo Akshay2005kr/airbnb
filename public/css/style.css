@@ -135,3 +135,22 @@ footer{
         grid-template-columns: 1fr;
     }
 }
+
+.listing-link .card {
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.listing-link .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12) !important;
+}
+
+.listing-link img {
+    transition: transform 0.3s ease;
+}
+
+.listing-link:hover img {
+    transform: scale(1.03);
+}

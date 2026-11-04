@@ -1,35 +1,56 @@
+```ejs
 <% layout("layouts/boilerplate") %>
 
-<h1>Wanderland Listings</h1>
+<div class="container mt-4">
 
-<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
+    <div class="mb-4">
+        <h1 class="fw-bold">Wanderland Listings</h1>
+        <p class="text-muted">Explore beautiful places for your next adventure.</p>
+    </div>
 
-    <% for (let listing of allListing) { %>
-      <a href="/listings/<%= listing._id%>" class="listing-link">
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4">
 
-        <div class="col mb-4">
+        <% for (let listing of allListing) { %>
 
-            <div class="card">
-                <img
-                    src="<%= listing.image.url%>"
-                    class="card-img-top"
-                    alt="listing_image"
-                    style="height: 20rem;"
-                />
-                <div class="card-img-overlay">aaa</div>
+            <div class="col">
 
-                <div class="card-body">
-                    <p class="card-text">
-                       <b> <%= listing.title %></b>
-                        <br>
-                        Price: ₹ <%= listing.price.toLocaleString("en-IN") %>
-                    </p>
-                </div>
+                <a href="/listings/<%= listing._id %>" class="listing-link text-decoration-none">
+
+                    <div class="card h-100 border-0 shadow-sm">
+
+                        <img
+                            src="<%= listing.image.url %>"
+                            class="card-img-top"
+                            alt="<%= listing.title %>"
+                            style="height: 20rem; object-fit: cover;"
+                        />
+
+                        <div class="card-body">
+
+                            <h5 class="card-title fw-bold text-dark">
+                                <%= listing.title %>
+                            </h5>
+
+                            <p class="card-text text-dark mb-2">
+                                <b>₹ <%= listing.price.toLocaleString("en-IN") %></b>
+                                <span class="text-muted"> / night</span>
+                            </p>
+
+                            <small class="text-primary fw-semibold">
+                                View Details →
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </a>
+
             </div>
 
-        </div>
-        </a>
+        <% } %>
 
-    <% } %>
+    </div>
 
 </div>
+```
